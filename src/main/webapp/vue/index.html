@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+    <div id="userListWebVue">
+        <h2>Liste des utilisateurs par appel web rest</h2>
+        <div v-if="list.length == 0">Aucun utilisateur</div>
+        <table v-if="list.length > 0">
+            <tr>
+                <td>Prénom</td>
+                <td>Nom</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr v-for="(each) in list">
+                <td>{{ each.first_name }}</td>
+                <td>{{ each.last_name }}</td>
+                <td><button @click="deleteUser(each)">Supprimer</button></td>
+                <td><button @click="showUpdateForm(each)">Mettre à jour</button></td>
+            </tr>
+        </table>
+        <button v-on:click="showCreateForm">Ajouter un utilisateur</button>
+    </div>
+    <div id="userFormVue">
+        <div v-if="isShow">
+            <label>Prénom</label> <input v-model="current.first_name" />
+            <label>Nom</label> <input v-model="current.last_name" />
+            <button v-on:click="edit">{{current.id > 0 ? 'Modifier' : 'Créer'}}</button>
+            <button v-on:click="cancel">Annuler</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

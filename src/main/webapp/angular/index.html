@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <script src="angular.min.js"></script>
+        <script src="script.js"></script>
+    </head>
+    <body ng-app="userApp">
+        <div ng-controller="userListWebController">
+            <h2>Liste des utilisateurs par appel web rest</h2>
+            <div ng-hide="list.length > 0">Aucun utilisateur</div>
+            <div ng-show="list.length > 0">
+                <label>Liste</label>
+                <table>
+                    <tr ng-repeat="data in list">
+                        <td>{{data.first_name}}</td>
+                        <td>{{data.last_name}}</td>
+                        <td><input type="button" ng-click="deleteUser(data)" value="supprimer" /></td>
+                        <td><input type="button" ng-click="updateUser(data)" value="modifier" /></td>
+                    </tr>
+                </table>
+            </div>
+            <input type="button" ng-click="showCreateUser()" value="Ajouter un utilisateur" />
+        </div>
+        <div ng-controller="userEditFormController">
+            <div ng-show="show">
+                <label>Prénom</label> <input type="text" ng-model="current.first_name" />
+                <label>Nom</label> <input type="text" ng-model="current.last_name" />
+                <input type="button" ng-click="edit()" value="{{current.id > 0 ? 'modifier' : 'créer'}}" />
+                <input type="button" ng-click="cancel()" value="annuler" />
+            </div>
+        </div>
+    </body>
+</html>

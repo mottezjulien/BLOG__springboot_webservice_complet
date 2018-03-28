@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Stream;
 
-@Api(value = "User API", description = "the user API")
+@Api(value = "User API", description = "the user API", tags = "Users")
 @Controller
-@RequestMapping(value = "/webService/user")
+@RequestMapping(value = "${webservice.root.path}/user")
 public class UserSpringWebRestController {
 
     @Autowired

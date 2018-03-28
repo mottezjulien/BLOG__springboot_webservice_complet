@@ -1,12 +1,10 @@
 package fr.lapausedev.springboot2;
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -14,16 +12,24 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 public class SwaggerDocumentationConfig {
 
+    @Value("${management.endpoints.web.base-path}")
+    private String swaggerRootPath;
+
+    @Value("${webservice.root.path}")
+    private String webserviceRootPath;
+
     @Bean
     public Docket customImplementation() {
         return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(paths())
+                .paths(paths())
                 .build()
                 .apiInfo(apiInfo());
     }
 
-    private Predicate<RequestHandler> paths() {
-        return Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot"));
+    //
+
+    private Predicate<String> paths() {
+        return url -> url.startsWith(swaggerRootPath) || url.startsWith(webserviceRootPath);
     }
 
     private ApiInfo apiInfo() {

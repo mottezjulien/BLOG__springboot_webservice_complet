@@ -26,8 +26,6 @@ public class SwaggerDocumentationConfig {
                 .apiInfo(apiInfo());
     }
 
-    //
-
     private Predicate<String> paths() {
         return url -> url.startsWith(swaggerRootPath) || url.startsWith(webserviceRootPath);
     }

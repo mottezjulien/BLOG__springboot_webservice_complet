@@ -1,20 +1,15 @@
-package fr.lapausedev.springboot2.user.persistence.entity;
+package fr.lapausedev.spring.user.facade.transport.object;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Entity
-@Table(name = "t_user")
-public class UserEntity {
+public class UserDTO {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", unique = true, nullable = false)
 	private int id;
 
-	@Column(name = "first_name")
+	@JsonProperty("first_name")
 	private String firstName;
 
-	@Column(name = "last_name")
+	@JsonProperty("last_name")
 	private String lastName;
 
 	public int getId() {

@@ -1,10 +1,10 @@
-package fr.lapausedev.springboot2.user.facade.controller;
+package fr.lapausedev.spring.user.facade.controller;
 
 
-import fr.lapausedev.springboot2.exception.ResourceNotFoundException;
-import fr.lapausedev.springboot2.user.facade.transport.assembler.UserDTOAssembler;
-import fr.lapausedev.springboot2.user.facade.transport.object.UserDTO;
-import fr.lapausedev.springboot2.user.domain.service.UserService;
+import fr.lapausedev.spring.exception.ResourceNotFoundException;
+import fr.lapausedev.spring.user.facade.transport.assembler.UserDTOAssembler;
+import fr.lapausedev.spring.user.facade.transport.object.UserDTO;
+import fr.lapausedev.spring.user.persistence.repository.UserRepository;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,15 +13,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
 @Api(value = "User API", description = "the user API", tags = "Users")
 @Controller
 @RequestMapping(value = "${webservice.root.path}/user")
-public class UserSpringWebRestController {
+public class UserController {
 
     @Autowired
-    private UserService service;
+    private UserRepository repository;
 
     @Autowired
     private UserDTOAssembler assembler;
@@ -36,7 +37,7 @@ public class UserSpringWebRestController {
             path = "/{userId}")
     @ResponseBody
     public UserDTO findById(@ApiParam(value = "userId", required = true) @PathVariable(value = "userId") int id) {
-        return assembler.fromModel(service.findById(id).orElseThrow(() -> new ResourceNotFoundException()));
+        return assembler.fromEntity(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException()));
     }
 
     @ApiOperation(value = "find all users", response = UserDTO.class, tags = "Users")
@@ -48,9 +49,10 @@ public class UserSpringWebRestController {
             produces = {MediaType.APPLICATION_JSON_VALUE},
             path = "/")
     @ResponseBody
-    public Stream<UserDTO> list() {
-        return service.findAll()
-                .map(entity -> assembler.fromModel(entity));
+    public List<UserDTO> list() {
+        List<UserDTO> list = new ArrayList<>();
+        repository.findAll().forEach(entity -> list.add(assembler.fromEntity(entity)));
+        return list;
     }
 
     @ApiOperation(value = "save a user", response = UserDTO.class, tags = "Users")
@@ -64,7 +66,7 @@ public class UserSpringWebRestController {
             name = "/")
     @ResponseBody
     public UserDTO save(@ApiParam(value = "userRequest", required = true) @RequestBody UserDTO request) {
-        return assembler.fromModel(service.save(assembler.toModel(request)));
+        return assembler.fromEntity(repository.save(assembler.toEntity(request)));
     }
 
     @ApiOperation(value = "delete a user", response = UserDTO.class, tags = "Users")
@@ -75,7 +77,7 @@ public class UserSpringWebRestController {
     @RequestMapping(method = RequestMethod.DELETE,
             path = "/{userId}")
     public ResponseEntity<Void> delete(@ApiParam(value = "userId", required = true) @PathVariable(value = "userId") int id) {
-        service.delete(service.findById(id).orElseThrow(() -> new ResourceNotFoundException()));
+        repository.delete(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException()));
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

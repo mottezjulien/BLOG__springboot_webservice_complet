@@ -1,4 +1,4 @@
-package fr.lapausedev.springboot2;
+package fr.lapausedev.spring;
 
 import com.google.common.base.Predicate;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +10,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
-public class SwaggerDocumentationConfig {
+public class SwaggerConfig {
 
     @Value("${management.endpoints.web.base-path}")
     private String swaggerRootPath;
